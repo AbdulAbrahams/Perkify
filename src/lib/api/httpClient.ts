@@ -24,6 +24,10 @@ export class HttpApiClient implements ApiClient {
     return session;
   }
 
+  restoreSession(session: AuthSession): void {
+    this.accessToken = session.accessToken;
+  }
+
   async register(credentials: RegisterCredentials): Promise<AuthSession> {
     const session = await this.request<AuthSession>("/auth/register", { method: "POST", body: credentials });
     this.accessToken = session.accessToken;
@@ -36,6 +40,10 @@ export class HttpApiClient implements ApiClient {
 
   async logout(): Promise<void> {
     await this.request<void>("/auth/logout", { method: "POST" });
+    this.accessToken = null;
+  }
+
+  clearSession(): void {
     this.accessToken = null;
   }
 

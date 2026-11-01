@@ -35,12 +35,19 @@
         }
       ],
       "expo-router",
-      "expo-status-bar"
+      "expo-notifications",
+      "expo-status-bar",
+      "expo-secure-store",
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow Perkify to use Face ID to secure your account."
+        }
+      ]
     ],
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ]
   }
 }

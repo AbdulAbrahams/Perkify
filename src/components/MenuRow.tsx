@@ -15,7 +15,7 @@ export function MenuRow({
 }) {
   return (
     <Pressable style={[styles.row, { borderBottomColor: palette.border }]} onPress={onPress}>
-      <Ionicons name={icon} size={19} color={palette.tint || Colors.brandPrimary} />
+      <Ionicons name={icon} size={19} color={palette.tint || palette.brandPrimary} />
       <Text style={[styles.label, { color: palette.text }]}>{label}</Text>
       <Ionicons name="chevron-forward" size={17} color={palette.textSecondary} />
     </Pressable>

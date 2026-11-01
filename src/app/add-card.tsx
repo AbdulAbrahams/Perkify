@@ -1,5 +1,5 @@
-import { router } from "expo-router";
-import { useState } from "react";
+import { router, useLocalSearchParams } from "expo-router";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Modal, View, StyleSheet, Pressable, Text } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
@@ -8,40 +8,66 @@ import { useRewards } from "../providers/RewardsProvider";
 import { useAppState } from "../providers/AppStateProvider";
 import { usePalette } from "../hooks/usePalette";
 import { CardEditorScreen } from "../screens/cards/CardEditorScreen";
+import { CustomerHeader } from "../components";
 import { styles } from "../styles/appStyles";
+import { getBrandForCard, getCardCategory, SELECTABLE_CARD_BRANDS, type BrandConfig } from "../config/brands";
+import type { LoyaltyCardCategory } from "../types/models";
 
 export default function AddCardRoute() {
+  const { mode, scan } = useLocalSearchParams<{ mode?: string; scan?: string }>();
   const { palette } = usePalette();
   const rewards = useRewards();
   const { selectedCard, setSelectedCard } = useAppState();
-  const isEditing = Boolean(selectedCard);
+  const cardToEdit = mode === "edit" ? selectedCard : null;
+  const isEditing = Boolean(cardToEdit);
+  const existingBrand = cardToEdit ? getBrandForCard(cardToEdit) : null;
+  const initialBrand = SELECTABLE_CARD_BRANDS.find((brand) => brand.id === existingBrand?.id) ?? null;
 
-  const [name, setName] = useState(selectedCard?.name ?? "");
-  const [number, setNumber] = useState(selectedCard?.number ?? "");
-  const [color, setColor] = useState(selectedCard?.color ?? "#3A4F4A");
-  
+  const [brandId, setBrandId] = useState<string | null>(initialBrand?.id ?? null);
+  const [name, setName] = useState(initialBrand?.name ?? "");
+  const [category, setCategory] = useState<LoyaltyCardCategory | null>(
+    initialBrand?.category ?? (cardToEdit ? getCardCategory(cardToEdit) : null),
+  );
+  const [number, setNumber] = useState(cardToEdit?.number ?? "");
+  const [color, setColor] = useState(cardToEdit?.color ?? initialBrand?.colors.background ?? "#3A4F4A");
+
   // Camera state
   const [isScanning, setIsScanning] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
 
+  const openScanner = useCallback(async () => {
+    if (!permission?.granted) {
+      const result = await requestPermission();
+      if (!result.granted) return;
+    }
+    setIsScanning(true);
+  }, [permission?.granted, requestPermission]);
+
+  const autoScanStarted = useRef(false);
+  useEffect(() => {
+    if (scan === "true" && !autoScanStarted.current) {
+      autoScanStarted.current = true;
+      void openScanner();
+    }
+  }, [openScanner, scan]);
+
   const save = async () => {
     const trimmed = name.trim();
-    if (!trimmed) return;
-    const payload = { name: trimmed, number: number.trim() || null, color };
-    const saved = selectedCard
-      ? await rewards.updateCard(selectedCard.id, payload)
+    if (!brandId || !trimmed || !category) return;
+    const payload = { name: trimmed, category, number: number.trim() || null, color };
+    const saved = cardToEdit
+      ? await rewards.updateCard(cardToEdit.id, payload)
       : await rewards.addCard(payload);
     if (!saved) return;
     setSelectedCard(null);
     router.replace("/(tabs)/cards");
   };
 
-  const openScanner = async () => {
-    if (!permission?.granted) {
-      const result = await requestPermission();
-      if (!result.granted) return; // User denied permission
-    }
-    setIsScanning(true);
+  const selectBrand = (brand: BrandConfig) => {
+    setBrandId(brand.id);
+    setName(brand.name);
+    setCategory(brand.category);
+    setColor(brand.colors.background);
   };
 
   const handleBarcodeScanned = ({ data }: { data: string }) => {
@@ -51,17 +77,20 @@ export default function AddCardRoute() {
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: palette.background }]}>
+      {/* <CustomerHeader /> */}
       <CardEditorScreen
         palette={palette}
         name={name}
+        brandId={brandId}
+        category={category}
         number={number}
         color={color}
         isEditing={isEditing}
-        onName={setName}
+        onBrandSelect={selectBrand}
         onNumber={setNumber}
         onColor={setColor}
         onSave={() => void save()}
-        onBack={() => { setSelectedCard(null); router.back(); }}
+        onBack={() => router.back()}
         onScan={openScanner} // 👈 Pass the scan handler
       />
 
@@ -76,7 +105,7 @@ export default function AddCardRoute() {
               barcodeTypes: ["code128", "ean13"],
             }}
           />
-          
+
           {/* Overlay */}
           <View style={localStyles.overlay}>
             <View style={localStyles.topBar}>
@@ -84,9 +113,9 @@ export default function AddCardRoute() {
                 <Ionicons name="close" size={28} color="#FFFFFF" />
               </Pressable>
             </View>
-            
+
             <View style={localStyles.scanFrame} />
-            
+
             <View style={localStyles.hintContainer}>
               <Ionicons name="barcode-outline" size={20} color="#3DDAC0" />
               <View>

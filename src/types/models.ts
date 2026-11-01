@@ -20,15 +20,20 @@ export type RegisterCredentials = LoginCredentials & {
   fullName: string;
 };
 
+export type LoyaltyCardCategory = "grocery" | "petrol" | "retail" | "rewards";
+
 export type LoyaltyCard = {
   id: string;
   name: string;
+  category?: LoyaltyCardCategory;
   color: string;
   points: string;
   number: string | null;
 };
 
-export type CreateLoyaltyCard = Omit<LoyaltyCard, "id" | "points">;
+export type CreateLoyaltyCard = Omit<LoyaltyCard, "id" | "points" | "category"> & {
+  category: LoyaltyCardCategory;
+};
 export type UpdateLoyaltyCard = Partial<CreateLoyaltyCard>;
 
 export type LoyaltyTransaction = {

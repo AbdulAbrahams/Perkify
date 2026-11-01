@@ -10,6 +10,7 @@ import { RewardsProvider } from "../providers/RewardsProvider";
 import { AppStateProvider } from "../providers/AppStateProvider";
 import { AnimatedSplashScreen } from "../screens/AnimatedSplashScreen";
 import { View } from "react-native";
+import { configureNotificationHandler, NotificationResponseHandler } from "../lib/notifications";
 
 // Prevent the native splash from hiding automatically
 SplashScreen.preventAutoHideAsync();
@@ -18,6 +19,7 @@ export default function RootLayout() {
   const [isAppReady, setIsAppReady] = useState(false);
 
   useEffect(() => {
+    configureNotificationHandler();
     // Hide the native splash as soon as the layout mounts, 
     // transitioning immediately into our Custom Animated Splash
     SplashScreen.hideAsync();
@@ -30,7 +32,8 @@ export default function RootLayout() {
           <ProfileProvider>
             <RewardsProvider>
               <AppStateProvider>
-                <StatusBar style="light" />
+                <StatusBar style="auto" />
+                <NotificationResponseHandler />
                 {/* The Stack renders underneath the splash screen */}
                 <Stack screenOptions={{ headerShown: false }} />
                 

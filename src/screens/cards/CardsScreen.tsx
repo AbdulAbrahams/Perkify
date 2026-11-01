@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../../theme/colors";
-import { LoyaltyTile } from "../../components";
+import { CardCategoryTabs, LoyaltyTile, type CardCategoryFilter } from "../../components";
+import { getCardCategory } from "../../config/brands";
 import { styles } from "../../styles/appStyles";
 import type { LoyaltyCard } from "../../types/models";
 
@@ -13,13 +15,19 @@ type Props = {
 };
 
 export function CardsScreen({ palette, cards, onAdd, onSelect }: Props) {
+  const [selectedCategory, setSelectedCategory] = useState<CardCategoryFilter>("all");
+  const filteredCards = cards.filter((card) => {
+    if (selectedCategory === "all") return true;
+    return getCardCategory(card) === selectedCategory;
+  });
+
   return (
     <ScrollView style={styles.flex} contentContainerStyle={styles.pageContent}>
       <View style={styles.pageHeader}>
         <View>
-          <Text style={[styles.sectionTitle, { color: palette.text }]}>All Cards</Text>
+          <Text style={[styles.sectionTitle, { color: palette.text }]}>My Cards</Text>
           <Text style={[styles.bodyText, { color: palette.textSecondary }]}>
-            {cards.length} loyalty cards in your wallet
+            {filteredCards.length} {selectedCategory === "all" ? "loyalty cards" : `${selectedCategory} cards`}
           </Text>
         </View>
         <Pressable style={styles.smallAddButton} onPress={onAdd}>
@@ -27,21 +35,23 @@ export function CardsScreen({ palette, cards, onAdd, onSelect }: Props) {
         </Pressable>
       </View>
 
-      <View style={styles.filterPills}>
-        <View style={styles.filterPillActive}><Text style={styles.filterPillActiveText}>All Cards</Text></View>
-        <View style={[styles.filterPill, { backgroundColor: palette.surface }]}>
-          <Text style={[styles.filterPillText, { color: palette.textSecondary }]}>Points</Text>
-        </View>
-      </View>
+      <CardCategoryTabs palette={palette} selected={selectedCategory} onSelect={setSelectedCategory} />
 
       <View style={styles.cardGrid}>
-        {cards.map((card) => (
+        {filteredCards.map((card) => (
           <LoyaltyTile key={card.id} card={card} palette={palette} onPress={() => onSelect(card)} />
         ))}
       </View>
 
-      {cards.length === 0 && (
-        <EmptyState palette={palette} title="No cards yet" body="Add your first loyalty card to keep your rewards together." onPress={onAdd} />
+      {filteredCards.length === 0 && (
+        <EmptyState
+          palette={palette}
+          title={selectedCategory === "all" ? "No cards yet" : `No ${selectedCategory} cards yet`}
+          body={selectedCategory === "all"
+            ? "Add your first loyalty card to keep your rewards together."
+            : `Add a ${selectedCategory} loyalty card to see it in this filter.`}
+          onPress={onAdd}
+        />
       )}
 
       <Pressable style={styles.addWideButton} onPress={onAdd}>

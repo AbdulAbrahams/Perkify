@@ -21,8 +21,6 @@ export function ProfileScreen({
 }: Props) {
   return (
     <ScrollView style={styles.flex} contentContainerStyle={styles.pageContent}>
-      <Text style={[styles.sectionTitle, { color: palette.text, marginBottom: 18 }]}>Profile</Text>
-
       <View style={styles.profileHeader}>
         <View style={[styles.profileAvatar, { backgroundColor: palette.surfaceSlate }]}>
           <Text style={styles.profileAvatarText}>{getInitials(profile?.fullName ?? "")}</Text>

@@ -5,6 +5,7 @@ import { useProfile } from "../../providers/ProfileProvider";
 import { useAppState } from "../../providers/AppStateProvider";
 import { usePalette } from "../../hooks/usePalette";
 import { ProfileScreen } from "../../screens/profile/ProfileScreen";
+import { CustomerHeader } from "../../components";
 import { styles } from "../../styles/appStyles";
 
 export default function ProfileRoute() {
@@ -15,6 +16,7 @@ export default function ProfileRoute() {
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: palette.background }]}>
+      <CustomerHeader />
       <ProfileScreen
         palette={palette}
         profile={profile.profile ?? auth.user}

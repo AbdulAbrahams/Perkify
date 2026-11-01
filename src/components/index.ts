@@ -8,3 +8,5 @@ export { LoyaltyTile } from "./LoyaltyTile";
 export { MenuRow } from "./MenuRow";
 export { SettingsToggle } from "./SettingsToggle";
 export { Barcode } from "./Barcode";
+export { CustomerHeader } from "./CustomerHeader";
+export { CardCategoryTabs, type CardCategoryFilter } from "./CardCategoryTabs";

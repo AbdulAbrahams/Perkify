@@ -9,11 +9,12 @@ type SettingsShape = { notificationsEnabled: boolean; biometricLoginEnabled: boo
 type Props = {
   palette: (typeof Colors)["light"];
   settings: SettingsShape;
+  hasBiometricLogin: boolean;
   onUpdateSettings: (changes: Partial<SettingsShape>) => void;
   onBack: () => void;
 };
 
-export function SecurityScreen({ palette, settings, onUpdateSettings, onBack }: Props) {
+export function SecurityScreen({ palette, settings, hasBiometricLogin, onUpdateSettings, onBack }: Props) {
   return (
     <ScrollView style={styles.flex} contentContainerStyle={styles.pageContent}>
       <BackButton palette={palette} onPress={onBack} />
@@ -23,7 +24,13 @@ export function SecurityScreen({ palette, settings, onUpdateSettings, onBack }: 
       </Text>
 
       <View style={[styles.profileMenu, { backgroundColor: palette.surface }]}>
-        <SettingsToggle icon="finger-print-outline" label="Biometric login" value={settings.biometricLoginEnabled} onValueChange={(v) => onUpdateSettings({ biometricLoginEnabled: v })} palette={palette} />
+        <SettingsToggle
+          icon="finger-print-outline"
+          label="Biometric login"
+          value={settings.biometricLoginEnabled && hasBiometricLogin}
+          onValueChange={(value) => onUpdateSettings({ biometricLoginEnabled: value })}
+          palette={palette}
+        />
         <SettingsToggle icon="eye-off-outline" label="Hide balances" value={settings.hideBalances} onValueChange={(v) => onUpdateSettings({ hideBalances: v })} palette={palette} />
       </View>
 

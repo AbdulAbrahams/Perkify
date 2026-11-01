@@ -39,6 +39,11 @@ export class MockApiClient implements ApiClient {
     return clone(this.session);
   }
 
+  restoreSession(session: AuthSession): void {
+    this.session = clone(session);
+    this.profile = clone(session.user);
+  }
+
   async register(credentials: RegisterCredentials): Promise<AuthSession> {
     await wait();
     const validationError = validateFullName(credentials.fullName)
@@ -65,6 +70,10 @@ export class MockApiClient implements ApiClient {
 
   async logout(): Promise<void> {
     await wait();
+    this.session = null;
+  }
+
+  clearSession(): void {
     this.session = null;
   }
 

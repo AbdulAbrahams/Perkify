@@ -28,7 +28,7 @@ export function ProfileEditScreen({ palette, profile, isSaving, error, onBack, o
       <FormField label="Full name" value={fullName} onChangeText={setFullName} placeholder="Your name" palette={palette} autoCapitalize="words" />
       <FormField label="Email address" value={email} onChangeText={setEmail} placeholder="you@example.com" keyboardType="email-address" palette={palette} />
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
-      <Button title="Save profile" onPress={() => onSave(fullName, email)} loading={isSaving} />
+      <Button title="Save profile" onPress={() => onSave(fullName, email)} loading={isSaving} palette={palette} />
     </ScrollView>
   );
 }

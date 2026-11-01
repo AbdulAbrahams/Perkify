@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   onboarding: { flex: 1, paddingHorizontal: 0, paddingTop: 20, paddingBottom: 24 },
   onboardingTop: { height: 48, flexDirection: "row", alignItems: "center", justifyContent: "flex-end", marginTop: 15, paddingHorizontal: 24 },
   skip: { color: "#A0A0A0", fontSize: 14, fontWeight: "600" },
-  illustrationArea: { flex: 0.8, minHeight: 220, alignItems: "center", justifyContent: "center" },
+  illustrationArea: {backgroundColor: "transparent", flex: 0.8, minHeight: 220, alignItems: "center", justifyContent: "center" },
   onboardingTitle: { color: "#FFFFFF", fontSize: 24, lineHeight: 32, fontWeight: "700", textAlign: "center", marginBottom: 12, paddingHorizontal: 24 },
   onboardingBody: { color: "#A0A0A0", fontSize: 15, lineHeight: 22, textAlign: "center", paddingHorizontal: 32 },
   onboardingFooter: { marginTop: 24, flexDirection: "column", gap: 16, justifyContent: "center", alignItems: "center" },
@@ -26,23 +26,43 @@ export const styles = StyleSheet.create({
     height: 350, 
     alignItems: "center", 
     justifyContent: "center", 
-    marginTop: 20, 
+    marginTop: 20,
+    backgroundColor: "transparent",
+  },
+  rewardAnimationLayer: {
+    position: "absolute",
+    left: 50,
+    top: 100,
+    width: 250,
+    height: 150,
+    backgroundColor: "transparent",
   },
   rewardCard: { 
     position: "absolute", 
-    width: 240, // Standard credit card aspect ratio
+    width: 250, // Standard credit card aspect ratio
     height: 150, 
     borderRadius: 16, 
-    // Removed padding here so the background image goes edge-to-edge
     shadowColor: "#000", 
-    shadowOpacity: 0.4, 
-    shadowRadius: 15, 
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 10,
+    shadowOpacity: 0.28, 
+    borderColor: "transparent",
+    shadowRadius: 12, 
+    shadowOffset: { width: 0, height: 8 },
     backfaceVisibility: "hidden",
+    backgroundColor: "transparent",
+  },
+  rewardCardImage: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    borderRadius: 16,
+    width: "100%",
+    height: "100%",
   },
   // 1. Top-Left Card (Back)
-  rewardBack: { 
+  rewardBack: {
+    backgroundColor: "transparent",
     transform: [
       { perspective: 1000 },
       { translateX: -45 },   
@@ -54,23 +74,25 @@ export const styles = StyleSheet.create({
   },
   // 2. Middle Right Card
   rewardMiddle: { 
+    backgroundColor: "transparent", 
     transform: [
       { perspective: 1000 },
       { translateX: 15 },    
       { translateY: 18 },   
       { rotateZ: "15deg" },
-      { rotateY: "-25deg" },
-      { rotateX: "5deg" }
+      { rotateY: "25deg" },
+      { rotateX: "15deg" }
     ] as ViewStyle['transform']
   },
   // 3. Bottom Front Card
   rewardFront: { 
+    backgroundColor: "transparent",
     transform: [
       { perspective: 1000 },
       { translateX: -15 },     
       { translateY: 130 },    
       { rotateZ: "-15deg" },
-      { rotateY: "28deg" },
+      { rotateY: "-28deg" },
       { rotateX: "45deg" }
     ] as ViewStyle['transform']
   },
@@ -111,9 +133,11 @@ export const styles = StyleSheet.create({
   authSwitchText: { textAlign: "center", fontSize: 13, marginTop: 22 },
 
   // --- Home ---
-  homeContent: { paddingHorizontal: 20, paddingTop: 15, paddingBottom: 10 },
+  customerHeaderContainer: { paddingHorizontal: 20, paddingTop: 15 },
+  homeContent: { paddingHorizontal: 20, paddingTop: 0, paddingBottom: 0 },
   homeHeader: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 19 },
   userGreeting: { flexDirection: "row", alignItems: "center", gap: 11 },
+  customerHeaderText: { flexShrink: 1 },
   avatar: { width: 43, height: 43, borderRadius: 16, alignItems: "center", justifyContent: "center", backgroundColor: "#CDE9DE" },
   avatarInitial: { color: "#3A4F4A", fontSize: 17, fontWeight: "700" },
   eyebrow: { fontSize: 10, letterSpacing: 0.35 },
@@ -127,7 +151,7 @@ export const styles = StyleSheet.create({
   pointsUnit: { fontSize: 14, fontWeight: "500", color: "#D3F4ED" },
   pointsIcon: { width: 44, height: 44, borderRadius: 15, backgroundColor: "#FFFFFF1F", alignItems: "center", justifyContent: "center" },
   pointsProgress: { height: 6, backgroundColor: "#FFFFFF2F", borderRadius: 5, marginTop: 14, overflow: "hidden" },
-  pointsProgressFill: { width: "68%", height: 6, backgroundColor: "#3DDAC0", borderRadius: 5 },
+  pointsProgressFill: { height: 6, backgroundColor: "#3DDAC0", borderRadius: 5 },
   pointsCardBottom: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 10 },
   pointsHint: { color: "#D3F4ED", fontSize: 11 },
   sectionHeading: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 14 },
@@ -154,22 +178,38 @@ export const styles = StyleSheet.create({
 
   // --- Page / Cards ---
   pageContent: { paddingHorizontal: 20, paddingTop: 17, paddingBottom: 28 },
+  faqList: { gap: 12 },
+  faqCard: { borderRadius: 14, padding: 16, gap: 8 },
+  faqQuestion: { fontSize: 14, fontWeight: "700" },
+  helpIntro: { marginBottom: 18 },
   pageHeader: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 18 },
   smallAddButton: { width: 42, height: 42, borderRadius: 14, backgroundColor: Colors.light.tint, alignItems: "center", justifyContent: "center" },
-  filterPills: { flexDirection: "row", gap: 8, marginBottom: 17 },
-  filterPillActive: { backgroundColor: Colors.light.surfaceSlate, borderRadius: 20, paddingHorizontal: 16, paddingVertical: 9 },
-  filterPillActiveText: { color: "#FFFFFF", fontSize: 12, fontWeight: "600" },
-  filterPill: { borderRadius: 20, paddingHorizontal: 16, paddingVertical: 9 },
-  filterPillText: { fontSize: 12, fontWeight: "600" },
+  categoryTabs: { flexDirection: "row", gap: 8, marginBottom: 17 },
+  categoryTab: { flex: 1, minHeight: 42, borderRadius: 14, overflow: "hidden" },
+  categoryTabContent: { flex: 1, alignItems: "center", justifyContent: "center", borderRadius: 14, paddingHorizontal: 8 },
+  categoryTabText: { fontSize: 11, fontWeight: "600" },
+  cardGroupHeading: { flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 10 },
+  cardGroupTitle: { fontSize: 14, fontWeight: "700" },
+  cardGroupCount: { fontSize: 12, fontWeight: "600" },
+  emptyCategoryNotice: { fontSize: 13, marginBottom: 16 },
   addWideButton: { minHeight: 50, borderRadius: 14, backgroundColor: "#238C7B12", flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 9 },
   addWideText: { color: Colors.light.tint, fontSize: 14, fontWeight: "700" },
 
   // --- Editor / Detail ---
-  editorTitle: { marginTop: 2, marginBottom: 7 },
+  editorTitle: { },
   editorIntro: { marginBottom: 20 },
+  brandSelector: { minHeight: 48, borderWidth: 1, borderRadius: 12, paddingHorizontal: 14, flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 8 },
+  brandSelectorText: { fontSize: 14, fontWeight: "600" },
+  brandPickerMenu: { borderWidth: 1, borderRadius: 12, overflow: "hidden", marginBottom: 14 },
+  brandPickerOption: { minHeight: 46, flexDirection: "row", alignItems: "center", gap: 10, paddingHorizontal: 12 },
+  brandColorDot: { width: 20, height: 20, borderRadius: 7, borderWidth: 1 },
+  brandPickerName: { flex: 1, fontSize: 13, fontWeight: "600" },
+  brandPickerCategory: { fontSize: 11 },
+  cardCategorySummary: { minHeight: 42, borderRadius: 12, paddingHorizontal: 13, flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 15 },
+  cardCategorySummaryText: { fontSize: 13, fontWeight: "700" },
   cardPreview: { minHeight: 176, borderRadius: 20, padding: 20, alignItems: "center", justifyContent: "space-between", marginBottom: 24 },
   cardPreviewBrand: { alignSelf: "flex-start", fontSize: 18, fontWeight: "800", color: "#FFFFFF" },
-  cardPreviewNumber: { fontSize: 12, letterSpacing: 1.2 },
+  cardPreviewNumber: { fontSize: 14, letterSpacing: 2.5 },
   colorChoices: { flexDirection: "row", gap: 10, marginTop: 10, marginBottom: 16 },
   colorSwatch: { width: 32, height: 32, borderRadius: 12, borderWidth: 2 },
   saveCardButton: { marginTop: 10 },

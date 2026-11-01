@@ -5,6 +5,7 @@ import { useProfile } from "../providers/ProfileProvider";
 import { useAppState } from "../providers/AppStateProvider";
 import { usePalette } from "../hooks/usePalette";
 import { ProfileEditScreen } from "../screens/profile/ProfileEditScreen";
+import { CustomerHeader } from "../components";
 import { validateEmail, validateFullName } from "../utils/validation";
 import { styles } from "../styles/appStyles";
 
@@ -16,6 +17,7 @@ export default function ProfileEditRoute() {
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: palette.background }]}>
+      <CustomerHeader />
       <ProfileEditScreen
         palette={palette}
         profile={profile.profile ?? auth.user}

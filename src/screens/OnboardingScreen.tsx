@@ -3,12 +3,12 @@ import {
   Pressable, 
   Text, 
   View, 
-  useColorScheme, 
   ScrollView, 
   Dimensions, 
   NativeSyntheticEvent, 
   NativeScrollEvent,
-  ImageBackground
+  Image,
+  Animated,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../theme/colors";
@@ -106,7 +106,7 @@ export function OnboardingScreen({ index, palette, onNext, onSkip, setIndex }: P
           <View key={i} style={{ width, flex: 1, alignItems: "center", justifyContent: "space-between" }}>
             
             <View style={[styles.illustrationArea, { width: "100%", flex: 0.8 }]}>
-              <RewardsIllustration index={i} />
+              <RewardsIllustration index={i} isActive={index === i} />
             </View>
 
             <View style={{ flex: 0.5, alignItems: "center", paddingTop: 20 }}>
@@ -148,38 +148,79 @@ export function OnboardingScreen({ index, palette, onNext, onSkip, setIndex }: P
   );
 }
 
-function RewardsIllustration({ index }: { index: number }) {
-  // Assign South African brands to the 3 slides
-  const currentBrands = index === 0 
-    ? [BRANDS.checkers, BRANDS.woolworths, BRANDS.picknpay] 
-    : [BRANDS.bp, BRANDS.shell, BRANDS.astron];
+function RewardsIllustration({ index, isActive }: { index: number; isActive: boolean }) {
+  const cardProgress = useRef([
+    new Animated.Value(0),
+    new Animated.Value(0),
+    new Animated.Value(0),
+  ]).current;
+
+  useEffect(() => {
+    if (!isActive) return;
+
+    cardProgress.forEach((progress) => {
+      progress.stopAnimation();
+      progress.setValue(0);
+    });
+
+    const entrance = Animated.stagger(
+      140,
+      cardProgress.map((progress) =>
+        Animated.spring(progress, {
+          toValue: 1,
+          damping: 11,
+          stiffness: 105,
+          mass: 0.8,
+          useNativeDriver: true,
+        }),
+      ),
+    );
+
+    entrance.start();
+    return () => entrance.stop();
+  }, [cardProgress, isActive]);
+
+  const brandSets = [
+    [BRANDS.checkers, BRANDS.woolworths, BRANDS.picknpay],
+    [BRANDS.bp, BRANDS.shell, BRANDS.astron],
+    [BRANDS.picknpay, BRANDS.bp, BRANDS.woolworths],
+  ];
+  const currentBrands = brandSets[index] ?? brandSets[0];
 
   return (
     <View style={styles.rewardStack}>
       
       {/* 1. Back Card */}
-      <ImageBackground 
-        source={currentBrands[0].image} 
-        style={[styles.rewardCard, styles.rewardBack]}
-        imageStyle={{ borderRadius: 16 }} // This clips the image to match the card radius
-      >
-      </ImageBackground>
+      {currentBrands.map((brand, cardIndex) => {
+        const progress = cardProgress[cardIndex];
+        const translateY = progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [-240 - cardIndex * 35, 0],
+        });
+        const rotate = progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [cardIndex % 2 === 0 ? "-18deg" : "18deg", "0deg"],
+        });
+        const cardStyle = [styles.rewardBack, styles.rewardMiddle, styles.rewardFront][cardIndex];
 
-      {/* 2. Middle Card */}
-      <ImageBackground 
-        source={currentBrands[1].image} 
-        style={[styles.rewardCard, styles.rewardMiddle]}
-        imageStyle={{ borderRadius: 16 }}
-      >
-      </ImageBackground>
-
-      {/* 3. Front Card */}
-      <ImageBackground 
-        source={currentBrands[2].image} 
-        style={[styles.rewardCard, styles.rewardFront]}
-        imageStyle={{ borderRadius: 16 }}
-      >
-      </ImageBackground>
+        return (
+          <Animated.View
+            key={`${index}-${cardIndex}`}
+            style={[
+              styles.rewardAnimationLayer,
+              { opacity: progress, transform: [{ translateY }, { rotateZ: rotate }] },
+            ]}
+          >
+            <View style={[styles.rewardCard, cardStyle]}>
+              <Image
+                source={brand.image}
+                style={styles.rewardCardImage}
+                resizeMode="stretch"
+              />
+            </View>
+          </Animated.View>
+        );
+      })}
 
     </View>
   );

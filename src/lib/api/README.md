@@ -5,6 +5,12 @@ the typed `ApiClient` contract. Authentication accepts any valid email and a
 password with at least 8 characters; mock card, profile, settings, and transaction changes stay
 in memory for the current app session.
 
+Cards include a `category` field with one of `grocery`, `petrol`, `retail`, or
+`rewards`. Card creation requires a category, and card responses should return
+it so category filters remain accurate for custom cards.
+The card editor offers Checkers, Woolworths, Pick n Pay, BP, Shell, Astron, and
+uCount; selecting a brand fills in its name and category.
+
 To use a backend, set `expo.extra.apiBaseUrl` in the root `app.json` to the API
 origin, then restart Expo. An empty URL keeps mock mode enabled. `HttpApiClient`
 uses the same `ApiClient` interface, adds the access token as a bearer token,

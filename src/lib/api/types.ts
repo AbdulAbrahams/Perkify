@@ -14,9 +14,11 @@ import type {
 
 export interface ApiClient {
   login(credentials: LoginCredentials): Promise<AuthSession>;
+  restoreSession(session: AuthSession): void;
   register(credentials: RegisterCredentials): Promise<AuthSession>;
   requestPasswordReset(email: string): Promise<void>;
   logout(): Promise<void>;
+  clearSession(): void;
   getProfile(): Promise<UserProfile>;
   updateProfile(profile: UpdateProfile): Promise<UserProfile>;
   getCards(): Promise<LoyaltyCard[]>;
