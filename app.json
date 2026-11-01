@@ -2,8 +2,9 @@
   "expo": {
     "name": "Perkify",
     "slug": "perkify",
+    "scheme": "perkify",
     "version": "1.0.0",
-    "icon": "./assets/app-icon.png",
+    "icon": "./assets/app-icon-dark.png",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -11,7 +12,7 @@
       "apiBaseUrl": ""
     },
     "ios": {
-      "icon": "./assets/app-icon.png"
+      "icon": "./assets/app-icon-dark.png"
     },
     "android": {
       "adaptiveIcon": {
@@ -32,11 +33,14 @@
             "backgroundColor": "#0F0F0F"
           }
         }
-      ]
+      ],
+      "expo-router",
+      "expo-status-bar"
     ],
     "platforms": [
       "ios",
-      "android"
+      "android",
+      "web"
     ]
   }
 }

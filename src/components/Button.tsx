@@ -7,7 +7,7 @@ type ButtonProps = {
   variant?: "primary" | "secondary" | "outline" | "danger";
   disabled?: boolean;
   loading?: boolean;
-  palette?: ThemeColors;
+  palette: ThemeColors; // Made required so it always gets the theme colors
 };
 
 export function Button({
@@ -20,6 +20,7 @@ export function Button({
 }: ButtonProps) {
   const primary = variant === "primary";
   const danger = variant === "danger";
+  
   return (
     <Pressable
       accessibilityRole="button"
@@ -27,16 +28,27 @@ export function Button({
       onPress={onPress}
       style={[
         styles.button,
-        primary && styles.primary,
-        variant === "secondary" && [styles.secondary, palette && { backgroundColor: palette.surface }],
-        variant === "outline" && [styles.outline, palette && { borderColor: palette.border }],
-        danger && [styles.danger, palette && { borderColor: palette.border }],
+        primary && { backgroundColor: palette.brandPrimary },
+        variant === "secondary" && { backgroundColor: palette.surface },
+        variant === "outline" && { borderWidth: 1, borderColor: palette.border },
+        danger && { borderWidth: 1, borderColor: Colors.danger },
         (disabled || loading) && styles.disabled,
       ]}
     >
-      {loading
-        ? <ActivityIndicator color={primary ? "#FFFFFF" : Colors.brandPrimary} />
-        : <Text style={[styles.label, primary && styles.primaryLabel, danger && styles.dangerLabel, !primary && !danger && palette && { color: palette.text }]}>{title}</Text>}
+      {loading ? (
+        <ActivityIndicator color={primary ? "#FFFFFF" : danger ? Colors.danger : palette.text} />
+      ) : (
+        <Text 
+          style={[
+            styles.label, 
+            primary && styles.primaryLabel, 
+            danger && styles.dangerLabel, 
+            !primary && !danger && { color: palette.text }
+          ]}
+        >
+          {title}
+        </Text>
+      )}
     </Pressable>
   );
 }
@@ -49,12 +61,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 16,
   },
-  primary: { backgroundColor: Colors.brandPrimary },
-  secondary: { backgroundColor: "#F4F4F4" },
-  outline: { borderWidth: 1, borderColor: "#E0E0E0" },
-  danger: { borderWidth: 1, borderColor: Colors.danger },
-  label: { color: Colors.brandPrimary, fontSize: 15, fontWeight: "700" },
-  primaryLabel: { color: "#FFFFFF" },
-  dangerLabel: { color: Colors.danger },
-  disabled: { opacity: 0.55 },
+  label: { 
+    fontSize: 15, 
+    fontWeight: "700" 
+  },
+  primaryLabel: { 
+    color: "#FFFFFF" 
+  },
+  dangerLabel: { 
+    color: Colors.danger 
+  },
+  disabled: { 
+    opacity: 0.55 
+  },
 });

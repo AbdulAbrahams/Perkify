@@ -7,3 +7,4 @@ export { LoadingState } from "./LoadingState";
 export { LoyaltyTile } from "./LoyaltyTile";
 export { MenuRow } from "./MenuRow";
 export { SettingsToggle } from "./SettingsToggle";
+export { Barcode } from "./Barcode";

@@ -8,15 +8,13 @@ export type ThemeColors = {
   tabIconDefault: string;
   tabIconSelected: string;
   border: string;
-};
-
-export const Colors: {
-  light: ThemeColors;
-  dark: ThemeColors;
   brandPrimary: string;
   brandAccent: string;
-  danger: string;
-} = {
+};
+
+export type ColorScheme = "light" | "dark";
+
+export const Colors: Record<ColorScheme, ThemeColors> & { danger: string } = {
   light: {
     text: "#1A1A1A",
     textSecondary: "#757575",
@@ -27,6 +25,8 @@ export const Colors: {
     tabIconDefault: "#757575",
     tabIconSelected: "#238C7B",
     border: "#E0E0E0",
+    brandPrimary: "#004852", 
+    brandAccent: "#004852",  
   },
   dark: {
     text: "#FFFFFF",
@@ -38,10 +38,8 @@ export const Colors: {
     tabIconDefault: "#A0A0A0",
     tabIconSelected: "#3DDAC0",
     border: "#2C2C2E",
+    brandPrimary: "#3DDAC0", 
+    brandAccent: "#3DDAC0",  
   },
-  brandPrimary: "#238C7B",
-  brandAccent: "#3DDAC0",
   danger: "#D32F2F",
 };
-
-export type ColorScheme = keyof Pick<typeof Colors, "light" | "dark">;

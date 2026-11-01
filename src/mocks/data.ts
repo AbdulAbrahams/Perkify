@@ -15,14 +15,14 @@ export const mockProfile: UserProfile = {
 };
 
 export const mockCards: LoyaltyCard[] = [
-  { id: "checkers", name: "Checkers", color: "#20A9B5", points: "1,240 pts", number: null },
-  { id: "woolworths", name: "Woolworths", color: "#111111", points: "860 pts", number: null },
-  { id: "picknpay", name: "Pick n Pay", color: "#FFFFFF", points: "540 pts", number: null },
-  { id: "bp", name: "BP", color: "#19C90A", points: "2,150 pts", number: null },
-  { id: "engen", name: "Engen", color: "#F47A12", points: "320 pts", number: null },
-  { id: "shell", name: "Shell", color: "#FFD522", points: "710 pts", number: null },
-  { id: "count", name: "COUNT rewards", color: "#FFFFFF", points: "435 pts", number: null },
-  { id: "shoprite", name: "Shoprite", color: "#E93145", points: "290 pts", number: null },
+  { id: "checkers", name: "Checkers", color: "#20A9B5", points: "1,240 pts", number: "123456789" },
+  { id: "woolworths", name: "Woolworths", color: "#111111", points: "860 pts", number: "123456789"  },
+  { id: "picknpay", name: "Pick n Pay", color: "#FFFFFF", points: "540 pts", number: "123456789"  },
+  { id: "bp", name: "BP", color: "#19C90A", points: "2,150 pts", number: "123456789"  },
+  { id: "engen", name: "Engen", color: "#F47A12", points: "320 pts", number: "123456789"  },
+  { id: "shell", name: "Shell", color: "#FFD522", points: "710 pts", number: "123456789"  },
+  { id: "count", name: "COUNT rewards", color: "#FFFFFF", points: "435 pts", number: "123456789"  },
+  { id: "shoprite", name: "Shoprite", color: "#E93145", points: "290 pts", number: "123456789"  },
 ];
 
 export const mockTransactions: LoyaltyTransaction[] = [
